@@ -194,6 +194,7 @@ const MortgageCalculator = () => {
             value={formData.downPayment}
             onChange={handleChange}
             min="0"
+            max={formData.propertyPrice}
             required
           />
           {errors.downPayment && <div className="mt-1 text-sm text-red-600 text-left">{errors.downPayment}</div>}
