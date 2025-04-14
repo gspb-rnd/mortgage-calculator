@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import MortgageService from '../services/MortgageService';
-import './MortgageCalculator.css';
+import { Input } from './ui/input';
+import { Select } from './ui/select';
+import { Button } from './ui/button';
+import { Label } from './ui/label';
 
 const MortgageCalculator = () => {
   const [formData, setFormData] = useState({
@@ -107,11 +110,11 @@ const MortgageCalculator = () => {
   ];
 
   return (
-    <div className="mortgage-calculator">
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="creditScore">Credit Score (300-850):</label>
-          <input
+    <div className="max-w-3xl mx-auto">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="flex flex-col">
+          <Label htmlFor="creditScore">Credit Score (300-850):</Label>
+          <Input
             type="number"
             id="creditScore"
             name="creditScore"
@@ -121,12 +124,12 @@ const MortgageCalculator = () => {
             max="850"
             required
           />
-          {errors.creditScore && <div className="error">{errors.creditScore}</div>}
+          {errors.creditScore && <div className="mt-1 text-sm text-red-600 text-left">{errors.creditScore}</div>}
         </div>
 
-        <div className="form-group">
-          <label htmlFor="loanValue">Loan Value ($):</label>
-          <input
+        <div className="flex flex-col">
+          <Label htmlFor="loanValue">Loan Value ($):</Label>
+          <Input
             type="number"
             id="loanValue"
             name="loanValue"
@@ -135,12 +138,12 @@ const MortgageCalculator = () => {
             min="1"
             required
           />
-          {errors.loanValue && <div className="error">{errors.loanValue}</div>}
+          {errors.loanValue && <div className="mt-1 text-sm text-red-600 text-left">{errors.loanValue}</div>}
         </div>
 
-        <div className="form-group">
-          <label htmlFor="state">State:</label>
-          <select
+        <div className="flex flex-col">
+          <Label htmlFor="state">State:</Label>
+          <Select
             id="state"
             name="state"
             value={formData.state}
@@ -150,12 +153,12 @@ const MortgageCalculator = () => {
             {stateOptions.map(state => (
               <option key={state} value={state}>{state}</option>
             ))}
-          </select>
+          </Select>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="homeType">Home Type:</label>
-          <select
+        <div className="flex flex-col">
+          <Label htmlFor="homeType">Home Type:</Label>
+          <Select
             id="homeType"
             name="homeType"
             value={formData.homeType}
@@ -165,12 +168,12 @@ const MortgageCalculator = () => {
             {homeTypeOptions.map(type => (
               <option key={type} value={type}>{type}</option>
             ))}
-          </select>
+          </Select>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="propertyPrice">Property Price ($):</label>
-          <input
+        <div className="flex flex-col">
+          <Label htmlFor="propertyPrice">Property Price ($):</Label>
+          <Input
             type="number"
             id="propertyPrice"
             name="propertyPrice"
@@ -179,12 +182,12 @@ const MortgageCalculator = () => {
             min="1"
             required
           />
-          {errors.propertyPrice && <div className="error">{errors.propertyPrice}</div>}
+          {errors.propertyPrice && <div className="mt-1 text-sm text-red-600 text-left">{errors.propertyPrice}</div>}
         </div>
 
-        <div className="form-group">
-          <label htmlFor="downPayment">Down Payment ($):</label>
-          <input
+        <div className="flex flex-col">
+          <Label htmlFor="downPayment">Down Payment ($):</Label>
+          <Input
             type="number"
             id="downPayment"
             name="downPayment"
@@ -193,12 +196,12 @@ const MortgageCalculator = () => {
             min="0"
             required
           />
-          {errors.downPayment && <div className="error">{errors.downPayment}</div>}
+          {errors.downPayment && <div className="mt-1 text-sm text-red-600 text-left">{errors.downPayment}</div>}
         </div>
 
-        <div className="form-group">
-          <label htmlFor="income">Annual Income ($):</label>
-          <input
+        <div className="flex flex-col">
+          <Label htmlFor="income">Annual Income ($):</Label>
+          <Input
             type="number"
             id="income"
             name="income"
@@ -207,12 +210,12 @@ const MortgageCalculator = () => {
             min="1"
             required
           />
-          {errors.income && <div className="error">{errors.income}</div>}
+          {errors.income && <div className="mt-1 text-sm text-red-600 text-left">{errors.income}</div>}
         </div>
 
-        <div className="form-group">
-          <label htmlFor="points">Points:</label>
-          <input
+        <div className="flex flex-col">
+          <Label htmlFor="points">Points:</Label>
+          <Input
             type="number"
             id="points"
             name="points"
@@ -222,9 +225,9 @@ const MortgageCalculator = () => {
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="assetsUnderManagement">Assets Under Management ($):</label>
-          <input
+        <div className="flex flex-col">
+          <Label htmlFor="assetsUnderManagement">Assets Under Management ($):</Label>
+          <Input
             type="number"
             id="assetsUnderManagement"
             name="assetsUnderManagement"
@@ -232,47 +235,61 @@ const MortgageCalculator = () => {
             onChange={handleChange}
             min="0"
           />
-          {errors.assetsUnderManagement && <div className="error">{errors.assetsUnderManagement}</div>}
+          {errors.assetsUnderManagement && <div className="mt-1 text-sm text-red-600 text-left">{errors.assetsUnderManagement}</div>}
         </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Calculating...' : 'Calculate Mortgage Options'}
-        </button>
+        <div className="md:col-span-2">
+          <Button 
+            type="submit" 
+            disabled={loading}
+            className="w-full"
+            variant="default"
+            size="lg"
+          >
+            {loading ? 'Calculating...' : 'Calculate Mortgage Options'}
+          </Button>
+        </div>
       </form>
 
-      {apiError && <div className="api-error">{apiError}</div>}
+      {apiError && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md text-red-600 md:col-span-2">
+          {apiError}
+        </div>
+      )}
 
       {mortgageOptions.length > 0 && (
-        <div className="mortgage-options">
-          <h2>Mortgage Options</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Mortgage Type</th>
-                <th>Rate (%)</th>
-                <th>Points</th>
-                <th>APR (%)</th>
-                <th>Applied Rules</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mortgageOptions.map((option, index) => (
-                <tr key={index}>
-                  <td>{option.mortgageType}</td>
-                  <td>{option.rate.toFixed(3)}</td>
-                  <td>{option.points.toFixed(3)}</td>
-                  <td>{option.apr.toFixed(3)}</td>
-                  <td>
-                    <ul>
-                      {option.appliedRules.map((rule, ruleIndex) => (
-                        <li key={ruleIndex}>{rule}</li>
-                      ))}
-                    </ul>
-                  </td>
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800">Mortgage Options</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">Mortgage Type</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">Rate (%)</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">Points</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">APR (%)</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">Applied Rules</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {mortgageOptions.map((option, index) => (
+                  <tr key={index} className="hover:bg-gray-50">
+                    <td className="px-4 py-3 border-b">{option.mortgageType}</td>
+                    <td className="px-4 py-3 border-b">{option.rate.toFixed(3)}</td>
+                    <td className="px-4 py-3 border-b">{option.points.toFixed(3)}</td>
+                    <td className="px-4 py-3 border-b">{option.apr.toFixed(3)}</td>
+                    <td className="px-4 py-3 border-b">
+                      <ul className="list-disc pl-5">
+                        {option.appliedRules.map((rule, ruleIndex) => (
+                          <li key={ruleIndex} className="text-sm">{rule}</li>
+                        ))}
+                      </ul>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
