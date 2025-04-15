@@ -34,7 +34,8 @@ build/
 
 ### Gradle ###
 .gradle/
-gradle/
-gradlew
-gradlew.bat
 bin/
+# Allow gradle wrapper files
+!gradle/wrapper/
+!gradlew
+!gradlew.bat
