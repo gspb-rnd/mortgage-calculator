@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MortgageService from '../services/MortgageService';
 import { Input } from './ui/input';
 import { Select } from './ui/select';
@@ -8,7 +8,6 @@ import { Label } from './ui/label';
 const MortgageCalculator = () => {
   const [formData, setFormData] = useState({
     creditScore: 750,
-    loanValue: 400000,
     state: 'CA',
     homeType: 'Single Family',
     propertyPrice: 500000,
@@ -36,10 +35,6 @@ const MortgageCalculator = () => {
     
     if (formData.creditScore < 300 || formData.creditScore > 850) {
       newErrors.creditScore = 'Credit score must be between 300 and 850';
-    }
-    
-    if (formData.loanValue <= 0) {
-      newErrors.loanValue = 'Loan value must be positive';
     }
     
     if (formData.propertyPrice <= 0) {
@@ -73,7 +68,13 @@ const MortgageCalculator = () => {
     if (validateForm()) {
       setLoading(true);
       try {
-        const options = await MortgageService.calculateMortgageOptions(formData);
+        const calculatedLoanValue = formData.propertyPrice - formData.downPayment;
+        const dataToSubmit = {
+          ...formData,
+          loanValue: calculatedLoanValue
+        };
+        
+        const options = await MortgageService.calculateMortgageOptions(dataToSubmit);
         setMortgageOptions(options);
       } catch (error) {
         console.error('Error calculating mortgage options:', error);
@@ -127,19 +128,7 @@ const MortgageCalculator = () => {
           {errors.creditScore && <div className="mt-1 text-sm text-red-600 text-left">{errors.creditScore}</div>}
         </div>
 
-        <div className="flex flex-col">
-          <Label htmlFor="loanValue">Loan Value ($):</Label>
-          <Input
-            type="number"
-            id="loanValue"
-            name="loanValue"
-            value={formData.loanValue}
-            onChange={handleChange}
-            min="1"
-            required
-          />
-          {errors.loanValue && <div className="mt-1 text-sm text-red-600 text-left">{errors.loanValue}</div>}
-        </div>
+        {/* Loan Value field removed - now calculated as (Property Price - Down Payment) */}
 
         <div className="flex flex-col">
           <Label htmlFor="state">State:</Label>
