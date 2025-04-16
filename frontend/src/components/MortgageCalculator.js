@@ -5,6 +5,10 @@ import { Select } from './ui/select';
 import { Button } from './ui/button';
 import { Label } from './ui/label';
 
+const formatNumberWithCommas = (num) => {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
 const MortgageCalculator = () => {
   const [formData, setFormData] = useState({
     creditScore: 750,
@@ -22,11 +26,36 @@ const MortgageCalculator = () => {
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');
 
+  const [displayValues, setDisplayValues] = useState({
+    creditScore: '750',
+    propertyPrice: '500,000',
+    downPayment: '100,000',
+    income: '120,000',
+    points: '0',
+    assetsUnderManagement: '200,000'
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    if (name === 'state' || name === 'homeType') {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+      return;
+    }
+    
+    const numericValue = value.replace(/,/g, '');
+    
     setFormData({
       ...formData,
-      [name]: name === 'state' || name === 'homeType' ? value : Number(value)
+      [name]: Number(numericValue)
+    });
+    
+    setDisplayValues({
+      ...displayValues,
+      [name]: numericValue === '' ? '' : formatNumberWithCommas(numericValue)
     });
   };
 
@@ -116,13 +145,11 @@ const MortgageCalculator = () => {
         <div className="flex flex-col">
           <Label htmlFor="creditScore">Credit Score (300-850):</Label>
           <Input
-            type="number"
+            type="text"
             id="creditScore"
             name="creditScore"
-            value={formData.creditScore}
+            value={displayValues.creditScore}
             onChange={handleChange}
-            min="300"
-            max="850"
             required
           />
           {errors.creditScore && <div className="mt-1 text-sm text-red-600 text-left">{errors.creditScore}</div>}
@@ -163,12 +190,11 @@ const MortgageCalculator = () => {
         <div className="flex flex-col">
           <Label htmlFor="propertyPrice">Property Price ($):</Label>
           <Input
-            type="number"
+            type="text"
             id="propertyPrice"
             name="propertyPrice"
-            value={formData.propertyPrice}
+            value={displayValues.propertyPrice}
             onChange={handleChange}
-            min="1"
             required
           />
           {errors.propertyPrice && <div className="mt-1 text-sm text-red-600 text-left">{errors.propertyPrice}</div>}
@@ -177,13 +203,11 @@ const MortgageCalculator = () => {
         <div className="flex flex-col">
           <Label htmlFor="downPayment">Down Payment ($):</Label>
           <Input
-            type="number"
+            type="text"
             id="downPayment"
             name="downPayment"
-            value={formData.downPayment}
+            value={displayValues.downPayment}
             onChange={handleChange}
-            min="0"
-            max={formData.propertyPrice}
             required
           />
           {errors.downPayment && <div className="mt-1 text-sm text-red-600 text-left">{errors.downPayment}</div>}
@@ -192,12 +216,11 @@ const MortgageCalculator = () => {
         <div className="flex flex-col">
           <Label htmlFor="income">Annual Income ($):</Label>
           <Input
-            type="number"
+            type="text"
             id="income"
             name="income"
-            value={formData.income}
+            value={displayValues.income}
             onChange={handleChange}
-            min="1"
             required
           />
           {errors.income && <div className="mt-1 text-sm text-red-600 text-left">{errors.income}</div>}
@@ -206,24 +229,22 @@ const MortgageCalculator = () => {
         <div className="flex flex-col">
           <Label htmlFor="points">Points:</Label>
           <Input
-            type="number"
+            type="text"
             id="points"
             name="points"
-            value={formData.points}
+            value={displayValues.points}
             onChange={handleChange}
-            step="0.125"
           />
         </div>
 
         <div className="flex flex-col">
           <Label htmlFor="assetsUnderManagement">Assets Under Management ($):</Label>
           <Input
-            type="number"
+            type="text"
             id="assetsUnderManagement"
             name="assetsUnderManagement"
-            value={formData.assetsUnderManagement}
+            value={displayValues.assetsUnderManagement}
             onChange={handleChange}
-            min="0"
           />
           {errors.assetsUnderManagement && <div className="mt-1 text-sm text-red-600 text-left">{errors.assetsUnderManagement}</div>}
         </div>
